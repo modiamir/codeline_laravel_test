@@ -15,7 +15,12 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+import VeeValidate from 'vee-validate';
+Vue.use(VeeValidate);
+
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('film-create', require('./components/film/FilmCreateComponent.vue'));
+Vue.component('film-list', require('./components/film/FilmListComponent.vue'));
 
 const app = new Vue({
     el: '#app'

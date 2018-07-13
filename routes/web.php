@@ -12,5 +12,10 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/films');
 });
+
+Route::resource('films', 'FilmController')->only([
+    'index', 'show', 'create',
+]);
+

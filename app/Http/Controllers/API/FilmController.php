@@ -7,6 +7,7 @@ use App\Http\Requests\Film\StoreRequest;
 use App\Http\Requests\Film\UpdateRequest;
 use App\Services\FilmService;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class FilmController extends Controller
 {
@@ -14,13 +15,17 @@ class FilmController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param \Illuminate\Http\Request $request
      * @param \App\Services\FilmService $filmService
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(FilmService $filmService)
+    public function index(Request $request, FilmService $filmService)
     {
-        $films = $filmService->paginate();
+        $films = $filmService->paginate(
+            $request->get('per_page'),
+            $request->get('page')
+        );
 
         return response()->json([
             'status' => true,

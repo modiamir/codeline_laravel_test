@@ -11,9 +11,9 @@ class FilmService
     /**
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate()
+    public function paginate($perPage = null, $page = null)
     {
-        return Film::query()->paginate();
+        return Film::query()->paginate($perPage, ['*'], 'page', $page);
     }
 
     /**
@@ -24,6 +24,11 @@ class FilmService
     public function find(int $id)
     {
         return Film::find($id);
+    }
+
+    public function findBySlug($slug)
+    {
+        return Film::query()->where('slug', '=', $slug)->firstOrFail();
     }
 
     /**
@@ -45,7 +50,7 @@ class FilmService
         /** @var \Illuminate\Http\UploadedFile $photo */
         if ($film->photo instanceof UploadedFile) {
             $photo = $film->photo;
-            $uploadedPath = $photo->store('film_photos');
+            $uploadedPath = $photo->store('film_photos', ['disk' => 'public']);
 
             if (!empty($uploadedPath)) {
                 $film->photo = $uploadedPath;

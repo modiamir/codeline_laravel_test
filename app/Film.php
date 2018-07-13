@@ -2,10 +2,15 @@
 
 namespace App;
 
+use App\Observers\FilmObserver;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class Film extends Model
 {
+    use HasSlug;
     protected $visible = [
         'id',
         'name',
@@ -16,6 +21,8 @@ class Film extends Model
         'country',
         'photo',
         'genres',
+        'photo_url',
+        'slug',
     ];
 
     protected $fillable = [
@@ -46,5 +53,25 @@ class Film extends Model
     public function genres()
     {
         return $this->belongsToMany(Genre::class, 'films_genres');
+    }
+
+    public function getPhotoUrlAttribute()
+    {
+        return Storage::url($this->photo);
+    }
+
+    public function toArray()
+    {
+        return array_merge(parent::toArray(), ['photo_url' => $this->photo_url]);
+    }
+
+    /**
+     * Get the options for generating the slug.
+     */
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom(['name'])
+            ->saveSlugsTo('slug');
     }
 }
