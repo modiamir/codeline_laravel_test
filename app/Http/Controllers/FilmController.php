@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Genre;
+use App\Http\Requests\Film\StoreRequest;
 use App\Services\FilmService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FilmController extends Controller
 {
@@ -13,9 +15,22 @@ class FilmController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, FilmService $filmService)
     {
-        return view('film/index');
+        if ($request->ajax()) {
+            $films = $filmService->paginate(
+                $request->get('per_page'),
+                $request->get('page')
+            );
+
+            return response()->json([
+                'status' => true,
+                'data' => $films->toArray(),
+            ]);
+        } else {
+            return view('film/index');
+        }
+
     }
 
     /**
@@ -36,9 +51,14 @@ class FilmController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request, FilmService $filmService)
     {
-        //
+        $film = $filmService->create($request->all());
+
+        return response()->json([
+            'status' => true,
+            'data' => $film
+        ]);
     }
 
     /**
@@ -50,8 +70,9 @@ class FilmController extends Controller
     public function show($id, FilmService $filmService)
     {
         $film = $filmService->findBySlug($id);
+        $userId = ($user = Auth::user()) ? $user->id : null;
 
-        return view('film/show', compact('film'));
+        return view('film/show', compact('film', 'userId'));
     }
 
     /**

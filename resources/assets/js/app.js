@@ -21,6 +21,9 @@ Vue.use(VeeValidate);
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 Vue.component('film-create', require('./components/film/FilmCreateComponent.vue'));
 Vue.component('film-list', require('./components/film/FilmListComponent.vue'));
+Vue.component('comment-list', require('./components/comment/CommentListComponent.vue'));
+Vue.component('comment-show', require('./components/comment/CommentShowComponent.vue'));
+Vue.component('comment-create', require('./components/comment/CommentCreateComponent.vue'));
 
 const app = new Vue({
     el: '#app'

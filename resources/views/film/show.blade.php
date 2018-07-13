@@ -1,4 +1,4 @@
-@extends('base')
+@extends('layouts.app')
 
 @section('title')
     Film {{ $film->name }}
@@ -8,7 +8,7 @@
     <div class="card card-default">
         <img class="card-img-top" src="{{ $film->photo_url }}" style="height: 180px; width: 100%; display: block;">
         <div class="card-header">
-            <span :v-show="currentName">{{ $film->name }}</span>
+            <span>{{ $film->name }}</span>
         </div>
 
         <div class="card-body">
@@ -22,6 +22,7 @@
                 @endforeach
             </ul>
 
+            <comment-list :initial-page="1" :film-id="{{$film->id}}" :logged-in="{{$userId ? 'true' : 'false'}}"></comment-list>
         </div>
     </div>
 @endsection

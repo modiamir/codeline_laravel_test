@@ -15,7 +15,23 @@ Route::get('/', function () {
     return redirect('/films');
 });
 
-Route::resource('films', 'FilmController')->only([
-    'index', 'show', 'create',
-]);
+Route::resource('/films', 'FilmController')->only([
+    'create', 'store'
+])->middleware('auth');
 
+Route::resource('/films', 'FilmController')->only([
+    'index', 'show'
+])->middleware(['web']);
+
+
+Route::resource('films.comments', 'FilmCommentController')->only([
+    'index'
+])->middleware('web');
+
+Route::resource('films.comments', 'FilmCommentController')->only([
+    'store'
+])->middleware('auth');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

@@ -4,7 +4,7 @@
             <div class="col">
                 <div class="card card-default">
                     <div class="card-body">
-                        <form @submit.prevent="createFilm" action="/api/films" method="post">
+                        <form @submit.prevent="createFilm" action="/films" method="post">
                             <div class="form-group">
                                 <label for="film-name" :class="{'text-danger': errors.first('name')}">Name</label>
                                 <input v-validate="'required'" type="text" :class="{'form-control': true, 'is-invalid': errors.first('name') }" v-model="film.name" name="name" id="film-name" aria-describedby="helpId"
