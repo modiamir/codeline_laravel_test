@@ -14,7 +14,8 @@ class Film extends Model
         'rating',
         'ticket_price',
         'country',
-        'photo'
+        'photo',
+        'genres',
     ];
 
     protected $fillable = [
@@ -25,8 +26,11 @@ class Film extends Model
         'rating',
         'ticket_price',
         'country',
-        'photo'
+        'photo',
+        'genres',
     ];
+
+    protected $perPage = 10;
 
     /**
      * Get the comments for the film.
@@ -41,6 +45,6 @@ class Film extends Model
      */
     public function genres()
     {
-        return $this->belongsToMany(Genre::class);
+        return $this->belongsToMany(Genre::class, 'films_genres');
     }
 }

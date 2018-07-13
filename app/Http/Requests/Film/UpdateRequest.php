@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Film;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FilmRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,13 @@ class FilmRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'string|required',
-            'description' => 'string|required',
-            'release_date' => 'date|required',
-            'rating' => 'required|in:1,2,3,4,5',
-            'ticket_price' => 'required|numeric|min:0',
-            'country' => 'string|required',
+            'name' => 'string',
+            'description' => 'string',
+            'release_date' => 'date',
+            'rating' => 'in:1,2,3,4,5',
+            'genres' => 'exists:genres,id',
+            'ticket_price' => 'numeric|min:0',
+            'country' => 'string',
             'photo' => 'file|mimes:jpeg,bmp,png|min:0|max:1024'
         ];
     }

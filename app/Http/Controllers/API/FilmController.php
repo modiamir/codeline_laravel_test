@@ -3,21 +3,24 @@
 namespace App\Http\Controllers\API;
 
 use App\Film;
-use App\Http\Requests\FilmRequest;
-use Illuminate\Http\Request;
+use App\Http\Requests\Film\StoreRequest;
+use App\Http\Requests\Film\UpdateRequest;
+use App\Services\FilmService;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Storage;
 
 class FilmController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
+     * @param \App\Services\FilmService $filmService
+     *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(FilmService $filmService)
     {
-        $films = Film::query()->paginate(10);
+        $films = $filmService->paginate();
 
         return response()->json([
             'status' => true,
@@ -28,25 +31,15 @@ class FilmController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  FilmRequest $request
+     * @param  StoreRequest $request
+     *
+     * @param \App\Services\FilmService $filmService
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(FilmRequest $request)
+    public function store(StoreRequest $request, FilmService $filmService)
     {
-        $film = new Film();
-        $film->fill($request->all());
-
-        /** @var \Illuminate\Http\UploadedFile $photo */
-        if ($photo = $film->photo) {
-            $uploadedPath = $photo->store('film_photos');
-
-            if (!empty($uploadedPath)) {
-                $film->photo = $uploadedPath;
-            }
-        }
-
-        $film->save();
+        $film = $filmService->create($request->all());
 
         return response()->json([
             'status' => true,
@@ -72,25 +65,16 @@ class FilmController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  FilmRequest  $request
-     * @param  Film         $film
+     * @param  \App\Http\Requests\Film\UpdateRequest $request
+     * @param  Film $film
+     *
+     * @param \App\Services\FilmService $filmService
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(FilmRequest $request, Film $film)
+    public function update(UpdateRequest $request, Film $film, FilmService $filmService)
     {
-        $film->fill($request->all());
-
-        /** @var \Illuminate\Http\UploadedFile $photo */
-        if ($photo = $film->photo) {
-            $uploadedPath = $photo->store('film_photos');
-
-            if (!empty($uploadedPath)) {
-                $film->photo = $uploadedPath;
-            }
-        }
-
-        $film->save();
+        $film = $filmService->save($film, $request->all());
 
         return response()->json([
             'status' => true,
@@ -101,12 +85,15 @@ class FilmController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Film  $film
+     * @param  Film $film
+     * @param \App\Services\FilmService $filmService
+     *
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
-    public function destroy(Film $film)
+    public function destroy(Film $film, FilmService $filmService)
     {
-        $film->delete();
+        $filmService->delete($film);
 
         return response()->json([
             'status' => true,
