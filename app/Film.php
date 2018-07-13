@@ -6,6 +6,28 @@ use Illuminate\Database\Eloquent\Model;
 
 class Film extends Model
 {
+    protected $visible = [
+        'id',
+        'name',
+        'description',
+        'release_date',
+        'rating',
+        'ticket_price',
+        'country',
+        'photo'
+    ];
+
+    protected $fillable = [
+        'id',
+        'name',
+        'description',
+        'release_date',
+        'rating',
+        'ticket_price',
+        'country',
+        'photo'
+    ];
+
     /**
      * Get the comments for the film.
      */
